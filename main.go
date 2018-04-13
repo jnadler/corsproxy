@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 )
 
 var ListenPort = "9200"
@@ -39,8 +40,16 @@ func Proxy(remoteUrl string) http.Handler {
 	return addCORSHeaders(singleHosted)
 }
 
-//TODO: pull out command line args
 func main() {
+	args := os.Args
+	if len(args) != 3 {
+		println("usage: corsproxy <listen-port> <remote-url>")
+		os.Exit(1)
+	}
+
+	ListenPort = args[1]
+	RemoteUrl = args[2]
+
 	println("Starting proxy for " + RemoteUrl + " on local port " + ListenPort)
 	proxy := Proxy(RemoteUrl)
 	http.ListenAndServe(":"+ListenPort, proxy)
