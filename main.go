@@ -16,6 +16,7 @@ func addCORSHeaders(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		handler.ServeHTTP(w, r)
 	})
 }
@@ -50,7 +51,7 @@ func main() {
 	ListenPort = args[1]
 	RemoteUrl = args[2]
 
-	println("Starting proxy for " + RemoteUrl + " on local port " + ListenPort)
+	log.Println("Starting proxy for " + RemoteUrl + " on local port " + ListenPort)
 	proxy := Proxy(RemoteUrl)
-	http.ListenAndServe(":"+ListenPort, proxy)
+	log.Fatal(http.ListenAndServe(":"+ListenPort, proxy))
 }
