@@ -8,7 +8,7 @@ import (
 )
 
 var ListenPort = "9200"
-var RemoteUrl = "http://elasticsearch.internal.digitalocean.com:9200/"
+var RemoteUrl = "http://elasticsearch:9200/"
 
 // Add CORS Headers
 func addCORSHeaders(handler http.Handler) http.Handler {
@@ -39,6 +39,7 @@ func Proxy(remoteUrl string) http.Handler {
 	return addCORSHeaders(singleHosted)
 }
 
+//TODO: pull out command line args
 func main() {
 	println("Starting proxy for " + RemoteUrl + " on local port " + ListenPort)
 	proxy := Proxy(RemoteUrl)
